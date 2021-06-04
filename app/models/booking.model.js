@@ -62,8 +62,20 @@ const bookingSchema = new Schema({
             return (this.freight.payedFreight >= this.freight.totalFreight)
                 ? 'Complete' : 'Pending';
         }
+    },
+    bookingStatus: {
+        type: String,
+        required: true,
+        enum: {
+            values: ['Rejected', 'Delevered', 'Pending'],
+            message: "{VALUE} not supported, please use ['Rejected', 'Delevered', 'Pending'] for booking status"
+        },
+        default: 'Pending'
+    },
+    rejectedAt: {
+        type: Date,
+        required: false
     }
-
 
 }, {
     timestamps: true

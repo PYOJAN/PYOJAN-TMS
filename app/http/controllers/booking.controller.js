@@ -64,7 +64,7 @@ const findOne = catchAsync(async (req, res, next) => {
 
 /**
  * @description update one Booking
- * @Method PATCH Update
+ * @Method PATCH 
  * @URL /api-v1/bookings/:id
  * @ACCESS private
  */
@@ -99,11 +99,45 @@ const updateOne = catchAsync(async (req, res, next) => {
     }
 });
 
+/**
+ * @description Delete one Booking
+ * @Method DELETE
+ * @URL /api-v1/bookings/:id
+ * @ACCESS private
+ */
+const deleteOne = catchAsync(async (req, res, next) => {
+    const ID = req.params.id;
 
+    const updateData = {
+        bookingStatus: 'Rejected',
+        rejectedAt: Date.now()
+    };
+
+    let isRejected = await Booking.findOne({ bookingNumber: ID });
+    if (!isRejected) return next(new appError(`Invalid booking ID: ${ID}`));
+    isRejected = isRejected.bookingStatus === 'Rejected' ? true : false;
+
+    if (isRejected) {
+        return next(new appError(`This Booking ${ID} is already Deleted`));
+    }
+    const data = await Booking.findOneAndUpdate({ bookingNumber: ID }, updateData, {
+        runValidators: true,
+        new: true
+    });
+
+
+    res.status(201)
+        .json({
+            status: 'Success',
+            message: ` This ${ID} Booking deleted successfully`,
+            data
+        });
+});
 
 export default {
     newBooking,
     allBookings,
     updateOne,
-    findOne
+    findOne,
+    deleteOne
 };

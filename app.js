@@ -9,6 +9,11 @@ import bookingRouter from './app/http/routers/booking.routers';
 const app = express();
 config({ path: './app/config/config.env' });
 app.use(express.json());
+app.set(() => {
+    const currentTime = new Date();
+    const currentOffset = currentTime.getTimezoneOffset();
+    return new Date(currentTime.getTime() + (330 + currentOffset) * 60000);
+});
 
 
 

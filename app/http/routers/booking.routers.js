@@ -11,7 +11,8 @@ router.route('/')
 
 router.route('/:id')
     .get(bookingController.findOne)
-    .patch(bookingController.updateOne);
+    .patch(bookingController.updateOne)
+    .delete(bookingController.deleteOne);
 
 
 export default router;
