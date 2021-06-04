@@ -1,0 +1,58 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "globals": {
+        "process": true
+      },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "rules": {
+        // "indent": [
+        //     "error",
+        //     "tab"
+        // ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "semi": [
+            "warn",
+            "always"
+        ]
+    }
+}
+
+// {
+//     "env": {
+//         "node": true,
+//         "commonjs": true
+//     },
+//     "extends": "eslint:recommended",
+//     "rules": {
+//         "indent": [
+//             "error",
+//             "tab"
+//         ],
+//         "linebreak-style": [
+//             "error",
+//             "unix"
+//         ],
+//         "quotes": [
+//             "error",
+//             "single"
+//         ],
+//         "semi": [
+//             "error",
+//             "always"
+//         ]
+//     },
+//     "parserOptions": {
+//         "ecmaVersion": 12,
+//         "sourceType": "module"
+//     },
+// }

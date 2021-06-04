@@ -1,0 +1,10 @@
+[-] Pending 
+[+] Complete
+
+
+[+] Project setup
+    --Server create
+    --Database connect
+[+] git setup
+
+[+] Globle Error setup

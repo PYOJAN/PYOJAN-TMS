@@ -1,0 +1,23 @@
+{
+  "name": "TMS",
+  "version": "1.0.0",
+  "description": "Transport managment system for broker's",
+  "main": "server.js",
+  "repository": "https://github.com/PYOJAN/TMS.git",
+  "author": "PYOJAN",
+  "license": "MIT",
+  "scripts": {
+    "start:dev": "NODE_ENV=dev nodemon -r esm",
+    "start:prod": "NODE_ENV=prod nodemon -r esm"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.12",
+    "validator": "^13.6.0"
+  }
+}
