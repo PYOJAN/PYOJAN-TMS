@@ -19,5 +19,8 @@
     "lodash": "^4.17.21",
     "mongoose": "^5.12.12",
     "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
   }
 }

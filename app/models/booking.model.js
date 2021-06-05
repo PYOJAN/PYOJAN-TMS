@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import bookingFreight from './payment.model';
 
 
 const bookingSchema = new Schema({
@@ -26,42 +27,8 @@ const bookingSchema = new Schema({
         required: true
     },
     freight: {
-        totalFreight: {
-            type: Number,
-            required: true
-        },
-        payedFreight: {
-            type: Number,
-            required: false
-        },
-        balenceFreight: {
-            type: Number,
-            required: false,
-            default: function () {
-                if (this.freight.payedFreight) {
-                    const balence = (
-                        Number(this.freight.totalFreight) - Number(this.freight.payedFreight)
-                    );
-                    return balence;
-                }
-            }
-        }
-    },
-    paymentType: {
-        type: String,
-        required: false,
-        enum: {
-            values: ['CASH', 'ONLINE'],
-            message: 'Payment type is either CASH, or ONLINE'
-        }
-    },
-    paymentStatus: {
-        type: String,
-        required: false,
-        default: function () {
-            return (this.freight.payedFreight >= this.freight.totalFreight)
-                ? 'Complete' : 'Pending';
-        }
+        type: Schema.Types.ObjectId,
+        ref: bookingFreight
     },
     bookingStatus: {
         type: String,
@@ -71,6 +38,10 @@ const bookingSchema = new Schema({
             message: "{VALUE} not supported, please use ['Rejected', 'Delevered', 'Pending'] for booking status"
         },
         default: 'Pending'
+    },
+    rejectionReasons: {
+        type: String,
+        required: false
     },
     rejectedAt: {
         type: Date,

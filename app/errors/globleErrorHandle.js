@@ -2,6 +2,7 @@ import appError from "./appError";
 
 // Development Error
 const devError = (err, req, res, next) => {
+    console.log(err);
     res.status(err.statusCode)
         .json({
             status: err.status,

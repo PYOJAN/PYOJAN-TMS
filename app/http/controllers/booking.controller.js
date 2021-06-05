@@ -1,7 +1,9 @@
 import appError from './../../errors/appError';
 import Booking from './../../models/booking.model';
+import bookingFreight from './../../models/payment.model';
 import catchAsync from './../../utils/catchAsync';
 import uniqueCN from './../../utils/CN-Number-generater';
+import apiFeature from './../../utils/api-feature';
 
 
 /**
@@ -11,13 +13,21 @@ import uniqueCN from './../../utils/CN-Number-generater';
  * @ACCESS private
  */
 const allBookings = catchAsync(async (req, res, next) => {
-    const Bookings = await Booking.find();
+    console.log(req.query);
+    const allBooking = new apiFeature(Booking.find(), req.query)
+        .Filter()
+        .Sorting()
+        .Limiting()
+        .Pagination();
+
+    // excuting Query
+    const AllData = await allBooking.query;
 
     res.status(200)
         .json({
             status: 'Success',
-            result: Bookings.length,
-            data: Bookings
+            result: AllData.length,
+            data: AllData
         });
 });
 
@@ -31,10 +41,27 @@ const newBooking = catchAsync(async (req, res, next) => {
 
     let LastCN_number = await Booking.find();
 
-    const newBooking = await Booking.create({
-        ...req.body,
-        "bookingNumber": uniqueCN(LastCN_number.length + 1)
+    const bookingData = { ...req.body };
+    console.log(bookingData);
+    let freightData = {};
+
+    const exludeData = ['totalFreight', 'payedFreight', 'paymentType'];
+    exludeData.map((val, key) => {
+        freightData[val] = bookingData[val];
+        delete bookingData[val];
     });
+
+    const freight = await bookingFreight.create({
+        ...freightData
+    });
+
+    const newBooking = await Booking.create({
+        ...bookingData,
+        "bookingNumber": uniqueCN(LastCN_number.length + 1),
+        freight: freight._id
+    });
+
+
     res.status(200)
         .json({
             status: 'success',
@@ -75,12 +102,16 @@ const updateOne = catchAsync(async (req, res, next) => {
     const prevPayedFreight = await Booking.findOne({
         bookingNumber: ID
     });
-
+    console.log(updatePayment);
     if (prevPayedFreight) {
-        updatePayment.freight.payedFreight = (prevPayedFreight.freight.payedFreight)
-            + (updatePayment.freight.payedFreight);
-        updatePayment['freight.payedFreight'] = updatePayment.freight.payedFreight;
-        delete updatePayment["freight"];
+        if (updatePayment.freight) {
+            updatePayment.freight.payedFreight = (prevPayedFreight.freight.payedFreight)
+                + (updatePayment.freight.payedFreight);
+            updatePayment['freight.payedFreight'] = updatePayment.freight.payedFreight;
+            updatePayment['freight.totalFreight'] = updatePayment.freight.payedFreight;
+            // delete updatePayment["freight"];
+        }
+        console.log(updatePayment);
 
         const data = await Booking.findOneAndUpdate(ID, updatePayment, {
             new: true,
